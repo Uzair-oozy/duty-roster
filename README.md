@@ -138,3 +138,4 @@ python -m http.server 3000
 - Summary counts in the header
 - Duplicate detection — same officer cannot have the same shift on the same date
 - Data persisted via Docker named volume
+Deployed and maintained by: Uzair
