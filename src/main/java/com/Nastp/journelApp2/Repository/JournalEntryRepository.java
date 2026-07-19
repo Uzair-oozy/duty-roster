@@ -1,4 +1,8 @@
 package com.Nastp.journelApp2.Repository;
 
-public interface JournalEntryRepository {
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+public interface JournalEntryRepository extends MongoRepository
+{
+
 }
