@@ -1,16 +1,19 @@
 package com.Nastp.journelApp2.entity;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class JournalEntry
 {
-    private String id;
+    private Long id;
     private String title;
     private String content;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
