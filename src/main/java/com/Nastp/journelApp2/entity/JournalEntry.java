@@ -5,6 +5,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Document(collection = "Journal")
 public class JournalEntry
 {
@@ -12,6 +14,15 @@ public class JournalEntry
     private ObjectId id;
     private String title;
     private String content;
+    private LocalDateTime Date;
+
+    public LocalDateTime getDate() {
+        return Date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        Date = date;
+    }
 
     public ObjectId getId() {
         return id;
