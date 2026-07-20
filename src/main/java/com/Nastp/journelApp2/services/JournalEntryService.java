@@ -2,6 +2,7 @@ package com.Nastp.journelApp2.services;
 
 import com.Nastp.journelApp2.Repository.JournalEntryRepository;
 import com.Nastp.journelApp2.entity.JournalEntry;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,12 +25,12 @@ public class JournalEntryService
         return journalEntryRepository.findAll();
     }
 
-    public Optional<JournalEntry> getById(Long id)
+    public Optional<JournalEntry> getById(ObjectId id)
     {
         return journalEntryRepository.findById(id);
     }
 
-    public boolean deleteById(Long id)
+    public boolean deleteById(ObjectId id)
     {
         journalEntryRepository.deleteById(id);
         return true;

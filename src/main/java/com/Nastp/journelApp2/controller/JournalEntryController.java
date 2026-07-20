@@ -2,6 +2,7 @@ package com.Nastp.journelApp2.controller;
 
 import com.Nastp.journelApp2.entity.JournalEntry;
 import com.Nastp.journelApp2.services.JournalEntryService;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +36,7 @@ public class JournalEntryController
 
     }
     @GetMapping("id/{id}")
-    public ResponseEntity<JournalEntry> getJournalEntryByID(@PathVariable Long id)
+    public ResponseEntity<JournalEntry> getJournalEntryByID(@PathVariable ObjectId id)
     {
         try
         {
@@ -63,7 +64,7 @@ public class JournalEntryController
     }
 
     @DeleteMapping("id/{Id}")
-    public ResponseEntity<boolean> deleteJournalEntryById(@PathVariable Long Id)
+    public ResponseEntity<boolean> deleteJournalEntryById(@PathVariable ObjectId Id)
     {
         try
         {
@@ -77,7 +78,7 @@ public class JournalEntryController
     }
 
     @PutMapping("id/{Id}")
-    public ResponseEntity<?> updateJournalEntryById(@PathVariable Long Id, @RequestBody JournalEntry entry)
+    public ResponseEntity<?> updateJournalEntryById(@PathVariable ObjectId Id, @RequestBody JournalEntry entry)
     {
         try
         {
