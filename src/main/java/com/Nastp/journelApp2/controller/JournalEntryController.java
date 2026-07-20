@@ -3,6 +3,9 @@ package com.Nastp.journelApp2.controller;
 import com.Nastp.journelApp2.entity.JournalEntry;
 import com.Nastp.journelApp2.services.JournalEntryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -15,31 +18,38 @@ public class JournalEntryController
     private JournalEntryService journalEntryService;
 
     @GetMapping
-    public List<JournalEntry> getAll()
+    public ResponseEntity<?> getAll()
     {
-        return journalEntryService.getAll();
+        List<JournalEntry> journalEntryList = journalEntryService.getAll();
+        if(journalEntryList != null && !journalEntryList.isEmpty())
+        {
+            return new ResponseEntity<>(journalEntryList, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
     @GetMapping("id/{id}")
-    public Optional<JournalEntry> getJournalEntryByID(@PathVariable Long id)
+    public ResponseEntity<JournalEntry> getJournalEntryByID(@PathVariable Long id)
     {
-        return journalEntryService.getById(id);
+        Optional<JournalEntry> journalEntry = journalEntryService.getById(id);
+        return new ResponseEntity<>(journalEntry.get(), HttpStatus.OK);
     }
 
     @PostMapping
-    public boolean createEntry(@RequestBody JournalEntry entry)
+    public ResponseEntity<JournalEntry> createEntry(@RequestBody JournalEntry entry)
     {
         journalEntryService.saveEntry(entry);
-        return true;
+        return new ResponseEntity<>(entry, HttpStatus.CREATED);
     }
 
     @DeleteMapping("id/{Id}")
-    public boolean deleteJournalEntryById(@PathVariable Long Id)
+    public ResponseEntity<boolean> deleteJournalEntryById(@PathVariable Long Id)
     {
-        return journalEntryService.deleteById(Id);
+        journalEntryService.deleteById(Id);
+        return new ResponseEntity<boolean>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("id/{Id}")
-    public boolean updateJournalEntryById(@PathVariable Long Id, @RequestBody JournalEntry entry)
+    public ResponseEntity<?> updateJournalEntryById(@PathVariable Long Id, @RequestBody JournalEntry entry)
     {
         JournalEntry journalEntry = journalEntryService.getById(Id).orElse(null);
         if (journalEntry != null)
@@ -47,8 +57,8 @@ public class JournalEntryController
             journalEntry.setTitle(entry.getTitle() != null && !entry.getTitle().equals("") ? entry.getTitle() : journalEntry.getTitle());
             journalEntry.setContent(entry.getContent() != null && !entry.getContent().equals("") ? entry.getContent() : journalEntry.getContent());
             journalEntryService.saveEntry(journalEntry);
-            return true;
+            return new ResponseEntity<boolean>(HttpStatus.OK);
         }
-        return false;
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }
