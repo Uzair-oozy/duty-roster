@@ -1,6 +1,8 @@
 package com.Nastp.journelApp2.controller;
 
 import com.Nastp.journelApp2.entity.JournalEntry;
+import com.Nastp.journelApp2.services.JournalEntryService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -9,34 +11,44 @@ import java.util.*;
 @RequestMapping("/journal")
 public class JournalEntryController
 {
-    private Map<Long, JournalEntry> journalEntries = new HashMap<>();
+    @Autowired
+    private JournalEntryService journalEntryService;
+
     @GetMapping
     public List<JournalEntry> getAll()
     {
-        return new ArrayList<>(journalEntries.values());
+        return journalEntryService.getAll();
     }
     @GetMapping("id/{id}")
-    public JournalEntry getJournalEntryByID(@PathVariable Long id)
+    public Optional<JournalEntry> getJournalEntryByID(@PathVariable Long id)
     {
-        return journalEntries.get(id);
+        return journalEntryService.getById(id);
     }
 
     @PostMapping
     public boolean createEntry(@RequestBody JournalEntry entry)
     {
-        journalEntries.put(entry.getId(), entry);
+        journalEntryService.saveEntry(entry);
         return true;
     }
 
     @DeleteMapping("id/{Id}")
-    public JournalEntry deleteJournalEntryById(@PathVariable Long Id)
+    public boolean deleteJournalEntryById(@PathVariable Long Id)
     {
-        return journalEntries.remove(Id);
+        return journalEntryService.deleteById(Id);
     }
 
     @PutMapping("id/{Id}")
-    public JournalEntry updateJournalEntryById(@PathVariable Long Id, @RequestBody JournalEntry entry)
+    public boolean updateJournalEntryById(@PathVariable Long Id, @RequestBody JournalEntry entry)
     {
-        return journalEntries.put(Id, entry);
+        JournalEntry journalEntry = journalEntryService.getById(Id).orElse(null);
+        if (journalEntry != null)
+        {
+            journalEntry.setTitle(entry.getTitle() != null && !entry.getTitle().equals("") ? entry.getTitle() : journalEntry.getTitle());
+            journalEntry.setContent(entry.getContent() != null && !entry.getContent().equals("") ? entry.getContent() : journalEntry.getContent());
+            journalEntryService.saveEntry(journalEntry);
+            return true;
+        }
+        return false;
     }
 }
